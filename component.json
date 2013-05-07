@@ -1,0 +1,16 @@
+{
+  "name": "map",
+  "repo": "jkroso/map",
+  "description": "apply a transformation to each item within an object",
+  "version": "0.1.0",
+  "keywords": ["map","array","key","values","async","series","object"],
+  "dependencies": {
+
+  },
+  "main": "src/index.js",
+  "scripts": [
+	  "src/index.js"
+  ],
+  "styles":[],
+  "license": "MIT"
+}

@@ -1,0 +1,36 @@
+{
+  "name": "map",
+  "version": "0.1.0",
+  "description": "apply a transformation to each item within an object",
+  "dependencies": {
+    "laissez-faire": "~0.12.1",
+    "when": "https://github.com/jkroso/when/archive/1.0.0.tar.gz"
+  },
+  "devDependencies": {
+    "mocha": "~1.9.0",
+    "chai": "~1.6.0",
+    "bigfile": "~0.3.3",
+    "sourcegraph": "~0.6.4"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jkroso/map.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jkroso/map/issues"
+  },
+  "keywords": [
+    "map",
+    "array",
+    "key",
+    "values",
+    "async",
+    "series",
+    "object"
+  ],
+  "author": "Jake Rosoman",
+  "license": "MIT"
+}
