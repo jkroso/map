@@ -1,19 +1,15 @@
 {
   "name": "map",
-  "version": "0.1.0",
-  "description": "apply a transformation to each item within an object",
+  "version": "0.2.0",
+  "description": "apply a transformation to each item within an object (async/sync/series)",
   "dependencies": {
-    "laissez-faire": "~0.12.1",
-    "when": "https://github.com/jkroso/when/archive/1.0.0.tar.gz"
+    "laissez-faire": "~0.12.4",
+    "when": "http://github.com/jkroso/when/tarball/1.0.0"
   },
   "devDependencies": {
-    "mocha": "~1.9.0",
+    "mocha": "~1.10.0",
     "chai": "~1.6.0",
-    "bigfile": "~0.3.3",
-    "sourcegraph": "~0.6.4"
-  },
-  "scripts": {
-    "test": "make test"
+    "serve": "http://github.com/jkroso/serve/tarball/1.2.2"
   },
   "repository": {
     "type": "git",

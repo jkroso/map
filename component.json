@@ -2,15 +2,29 @@
   "name": "map",
   "repo": "jkroso/map",
   "description": "apply a transformation to each item within an object",
-  "version": "0.1.0",
-  "keywords": ["map","array","key","values","async","series","object"],
-  "dependencies": {
-
-  },
-  "main": "src/index.js",
-  "scripts": [
-	  "src/index.js"
+  "version": "0.2.0",
+  "keywords": [
+    "map",
+    "array",
+    "key",
+    "values",
+    "async",
+    "series",
+    "object"
   ],
-  "styles":[],
-  "license": "MIT"
+  "dependencies": {
+    "jkroso/laissez-faire": "0.12.4",
+    "jkroso/when": "1.0.0"
+  },
+  "scripts": [
+    "index.js",
+    "async.js",
+    "series.js"
+  ],
+  "license": "MIT",
+  "development": {
+    "jkroso/serve": "1.2.2",
+    "visionmedia/mocha": "1.9.0",
+    "chaijs/chai": "1.6.0"
+  }
 }

@@ -1,20 +1,17 @@
-REPORTER= spec
+REPORTER=dot
 
-all: test/built.js
+serve: node_modules
+	@node_modules/serve/bin/serve
 
 test:
 	@node_modules/.bin/mocha test/*.test.js \
-		--bail \
-		-R $(REPORTER)
+		--reporter $(REPORTER) \
+		--bail
+
+node_modules: package.json
+	@packin install -m package.json -edr
 
 clean:
-	@rm -rf test/built.js
+	rm -r node_modules
 
-test/built.js: index.js series/* test/*
-	@node_modules/.bin/sourcegraph.js test/browser.js \
-		--plugins mocha,nodeish \
-		| node_modules/.bin/bigfile.js \
-			--export null \
-			--plugins nodeish,javascript > $@
-
-.PHONY: all test clean
+.PHONY: clean serve test

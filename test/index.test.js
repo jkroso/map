@@ -1,19 +1,18 @@
 
 var should = require('chai').should()
-  , map = require('..')
-  , series = require('../series')
   , promise = require('laissez-faire')
+  , series = require('../series')
+  , async = require('../async')
+  , map = require('..')
 
-/**
- * delay the calling of `fn` by some random time
- */
-
-function delay(fn){
-	var self = this
-	var args = [].slice.call(arguments, 1)
-	setTimeout(function () {
-		fn.apply(self, args)
-	}, Math.random() * 10)
+function delay(err, val){
+	var args = arguments
+	return promise(function(fulfill, reject){
+		setTimeout(function () {
+			if (args.length < 2) reject(err)
+			else fulfill(val)
+		}, Math.random() * 10)
+	})
 }
 
 describe('map', function () {
@@ -21,32 +20,35 @@ describe('map', function () {
 		map([1,2,3], function(v,k){
 			k.should.be.a('number')
 			return v + 1
-		}).should.deep.equal([2,3,4])
+		}).should.eql([2,3,4])
 	})
 
 	it('should work on objects', function () {
 		map({a:1, b:2, c:3}, function(v,k){
 			k.should.be.a('string')
 			return v + 1
-		}).should.deep.equal({a:2,b:3,c:4})
+		}).should.eql({a:2,b:3,c:4})
 	})
 
 	it('should call `fn` with `ctx` as `this`', function () {
 		map([1,2,3], function(v, k){
-			return this.pow(v, 2)
-		}, Math).should.deep.equal([1,4,9])
+			this.should.equal(Math)
+			return Math.pow(v, 2)
+		}, Math).should.eql([1,4,9])
 	})
 })
 
 describe('series', function () {
 	it('should work on arrays', function (done) {
 		var calls = []
-		series([1,2,3], function(v,k,next){
-			calls.push([k, v])
-			delay(next, null, v + 1)
+		series([1,2,3], function(v, k){
+			return delay(null, v + 1).then(function(inc){
+				calls.push([k, v])
+				return inc
+			})
 		}).then(function(res){
-			res.should.deep.equal([2,3,4])
-			calls.should.deep.equal([
+			res.should.eql([2,3,4])
+			calls.should.eql([
 				[0,1],
 				[1,2],
 				[2,3]
@@ -56,15 +58,17 @@ describe('series', function () {
 
 	it('should work on objects', function (done) {
 		var calls = []
-		series({a:1,b:2,c:3}, function(v,k,next){
+		series({a:1,b:2,c:3}, function(v, k){
 			k.should.be.a('string')
-			calls.push([k, v])
-			delay(next, null, v + 1)
+			return delay(null, v + 1).then(function(inc){
+				calls.push([k, v])
+				return inc
+			})
 		}).then(function(res){
-			res.should.deep.equal({a:2,b:3,c:4})
+			res.should.eql({a:2,b:3,c:4})
 			calls.sort(function(a,b){
 				return a[0] > b[0]
-			}).should.deep.equal([
+			}).should.eql([
 				['a',1],
 				['b',2],
 				['c',3]
@@ -73,65 +77,70 @@ describe('series', function () {
 	})
 
 	it('should call `fn` with `ctx` as `this`', function (done) {
-		series([1,2,3], function(v, k, next){
+		series([1,2,3], function(v, k){
 			this.should.equal(Math)
-			next()
+			return delay(null, null)
 		}, Math).node(done)
 	})
 
-	it('should handle empty input', function (done) {
-		series([], function(v,k,next){
+	it('should handle empty arrays', function (done) {
+		series([], function(v, k){
 			throw new Error('fail')
 		}).then(function(res){
-			res.should.deep.equal([])
+			res.should.eql([])
 		}).node(done)
 	})
 
+	it('should handle empty objects', function (done) {
+		series({}, function(v, k){
+			throw new Error('fail')
+		}).then(function(res){
+			res.should.eql({})
+		}).node(done)
+	})
+
+	errorHandling(series)
+})
+
+describe('async', function(){
+	it('should work on arrays', function(done){
+		async([1,2,3], function(v, i){
+			return delay(null, v + 1)
+		}).then(function(arr){
+			arr.should.eql([2,3,4])
+		}).node(done)
+	})
+
+	it('should work on objects', function(done){
+		async({a:1,b:2,c:3}, function(v, i){
+			return delay(null, v + 1)
+		}).then(function(obj){
+			obj.should.eql({a:2,b:3,c:4})
+		}).node(done)
+	})
+
+	errorHandling(async)
+})
+
+function errorHandling(map){
 	describe('error handling', function () {
 		it('should catch sync errors', function (done) {
-			series([1,2,3], function(v, k, next){
+			map([1,2,3], function(v, k){
 				if (v == 2) throw new Error('fail')
-				delay(next, null, v + 1)
-			}).otherwise(function(e){
+				return delay(null, v + 1)
+			}).then(null, function(e){
 				e.message.should.equal('fail')
-				done()
-			})
+			}).node(done)
 		})
 
 		it('should catch async errors', function (done) {
-			series([1,2,3], function(v, k, next){
-				delay(next, v == 2 ? new Error('fail') : null, v + 1)
-			}).otherwise(function(e){
+			map([1,2,3], function(v, k){
+				if (v == 2) return delay(new Error('fail'))
+				return delay(null, null)
+			}).then(null, function(e){
 				e.message.should.equal('fail')
 				done()
 			})
 		})
 	})
-
-	describe('promise API', function () {
-		it('should work on arrays', function (done) {
-			var calls = []
-			series([1,2,3], function(v,k){
-				calls.push([k, v])
-				return promise(function(fulfill){
-					delay(fulfill, v + 1)
-				})
-			}).then(function(res){
-				res.should.deep.equal([2,3,4])
-				calls.should.deep.equal([
-					[0,1],
-					[1,2],
-					[2,3]
-				])
-			}).node(done)
-		})
-
-		it('should handle empty input', function (done) {
-			series([], function(){
-				throw new Error('fail')
-			}).then(function(res){
-				res.should.deep.equal([])
-			}).node(done)
-		})
-	})
-})
+}
