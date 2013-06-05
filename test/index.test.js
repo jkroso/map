@@ -42,9 +42,9 @@ describe('series', function () {
 	it('should work on arrays', function (done) {
 		var calls = []
 		series([1,2,3], function(v, k){
-			return delay(null, v + 1).then(function(inc){
+			k.should.be.a('number')
+			return delay(null, v + 1).read(function(){
 				calls.push([k, v])
-				return inc
 			})
 		}).then(function(res){
 			res.should.eql([2,3,4])
@@ -58,21 +58,16 @@ describe('series', function () {
 
 	it('should work on objects', function (done) {
 		var calls = []
+		var delayed = []
 		series({a:1,b:2,c:3}, function(v, k){
 			k.should.be.a('string')
-			return delay(null, v + 1).then(function(inc){
-				calls.push([k, v])
-				return inc
+			calls.push([k, v])	
+			return delay(null, v + 1).read(function(){
+				delayed.push([k, v])
 			})
 		}).then(function(res){
 			res.should.eql({a:2,b:3,c:4})
-			calls.sort(function(a,b){
-				return a[0] > b[0]
-			}).should.eql([
-				['a',1],
-				['b',2],
-				['c',3]
-			])
+			calls.should.eql(delayed)
 		}).node(done)
 	})
 
