@@ -1,6 +1,11 @@
 
-var Promise = require('laissez-faire/full')
-var when = require('when/read')
+var decorate = require('when/decorate')
+  , ResType = require('result-type')
+  , Result = require('result')
+  , each = require('foreach')
+
+module.exports = decorate(parallelMap)
+module.exports.plain = parallelMap
 
 /**
  * transform each item in an object by applying `fn`
@@ -8,50 +13,38 @@ var when = require('when/read')
  * @param {Object|Array} obj
  * @param {Function} fn
  * @param {Any} [ctx]
- * @return {Promise} new `obj`
+ * @return {Result} new `obj`
  */
 
-module.exports = function(obj, fn, ctx){
-	var p = new Promise
-	if (obj == null) return p.write(obj)
-	var len = obj.length
-	var ret
-	
-	// array
-	if (len === +len) {
-		var res = new Array(len)
-		if (!len) return p.write(res)
-		var pending = len
-		var k = 0
-		while (k < len) {
-			try { ret = fn.call(ctx, obj[k], k) }
-			catch (e) { return p.error(e) }
-			when(ret, receiver(k++), fail)
-		}
-	} else {
-		var res = {}
-		var keys = []
-		for (var k in obj) keys.push(k)
-		if (!(len = keys.length)) return p.write(res)
-		var pending = len
-		var i = 0
-		while (i < len) {
-			try { ret = fn.call(ctx, obj[k = keys[i++]], k) }
-			catch (e) { return p.error(e) }
-			when(ret, receiver(k), fail)
-		}
-	}
-	
-	function receiver(k){
-		return function(value){
-			res[k] = value
-			if (--pending <= 0) p.write(res)
-		}
-	}
+function parallelMap(obj, fn, ctx){
+	if (obj == null) return Result.wrap(obj)
+	var newObj = new obj.constructor
+	var result = new Result
+	var done = false
+	var pending = 0
 
 	function fail(e){
-		p.error(e)
+		result.error(e)
 	}
 
-	return p
+	each(obj, function(value, key){
+		try { var val = fn.call(ctx, value, key) }
+		catch (e) { return result.error(e) }
+		if (val instanceof ResType) {
+			pending++
+			val.read(function(value){
+				newObj[key] = value
+				if (--pending === 0 && done) {
+					result.write(newObj)
+				}
+			}, fail)
+		} else {
+			newObj[key] = value
+		}
+	})
+	
+	if (pending === 0) result.write(newObj)
+	else done = true
+
+	return result
 }

@@ -13,18 +13,20 @@
     "object"
   ],
   "dependencies": {
-    "jkroso/laissez-faire": "0.12.4",
-    "jkroso/when": "1.0.0"
+    "jkroso/result": "0.2.0",
+    "jkroso/when": "3.1.2",
+    "jkroso/result-type": "1.0.0",
+    "jkroso/forEach": "0.8.1"
+  },
+  "development": {
+    "jkroso/serve": "1.4.1",
+    "visionmedia/mocha": "1.11.0",
+    "chaijs/chai": "1.7.0"
   },
   "scripts": [
     "index.js",
     "async.js",
     "series.js"
   ],
-  "license": "MIT",
-  "development": {
-    "jkroso/serve": "1.2.2",
-    "visionmedia/mocha": "1.9.0",
-    "chaijs/chai": "1.6.0"
-  }
+  "license": "MIT"
 }

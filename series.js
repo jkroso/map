@@ -1,6 +1,11 @@
 
-var Promise = require('laissez-faire/full')
-var when = require('when/read')
+var each = require('foreach/series').plain
+  , decorate = require('when/decorate')
+  , ResType = require('result-type')
+  , Result = require('result')
+
+module.exports = decorate(mapSeries)
+module.exports.plain = mapSeries
 
 /**
  * transform each item in an object by applying `fn`
@@ -11,46 +16,22 @@ var when = require('when/read')
  * @return {Promise} new `obj`
  */
 
-module.exports = function(obj, fn, ctx){
-	var p = new Promise
-	if (obj == null) return p.write(obj)
-	var len = obj.length
+function mapSeries(obj, fn, ctx){
+	if (obj == null) return Result.wrap(obj)
+	var newObj = new obj.constructor
 	
-	// array
-	if (len === +len) {
-		var res = new Array(len)
-		if (!len) return p.write(res)
-		var k = 0
-		var done = function(value){
-			res[k++] = value
-			if (k >= len) p.write(res)
-			else run(k)
+	return each(obj, function(value, key){
+		var val = fn.call(ctx, value, key)
+		if (val instanceof ResType) {
+			return val.read(function(value){
+				newObj[key] = value
+			}, ignore)
+		} else {
+			newObj[val] = val
 		}
-	} else {
-		var res = {}
-		var keys = []
-		for (var k in obj) keys.push(k)
-		if (!(len = keys.length)) return p.write(res)
-		var i = 0
-		k = keys[0]
-		var done = function(value){
-			res[k] = value
-			if (++i >= len) p.write(res)
-			else run(k = keys[i])
-		}
-	}
+	}).yeild(newObj)
+}
 
-	function fail(e){
-		p.error(e)
-	}
-	
-	function run(k){
-		try { k = fn.call(ctx, obj[k], k) }
-		catch (e) { return p.error(e) }
-		when(k, done, fail)
-	}
-
-	run(k)
-
-	return p
+function ignore(){
+	// ignore errors
 }

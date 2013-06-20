@@ -9,10 +9,10 @@
  */
 
 module.exports = function(obj, fn, ctx) {
-	if (obj == null) return
+	if (obj == null) return obj
 	var len = obj.length
 	// array
-	if (len === +len) {
+	if (typeof len == 'number') {
 		var res = new Array(len)
 		for (var k = 0; k < len; k++) {
 			res[k] = fn.call(ctx, obj[k], k)
