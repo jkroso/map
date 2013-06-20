@@ -1,23 +1,20 @@
 
 # map
 
-  apply a transformation to each item within an object
+  apply a transformation to each item within an object. async options included
 
-## Getting Started
+## Installation
 
-_With component_  
+_With [component](//github.com/component/component), [packin](//github.com/jkroso/packin) or [npm](//github.com/isaacs/npm)_  
 
-	$ component install jkroso/map
-
-_With npm_  
-
-	$ npm install --save https://github.com/jkroso/map/archive/master.tar.gz
-
+    $ {package mananger} install jkroso/map
 
 then in your app:
 
 ```js
 var map = require('map')
+var async = require('map/async')
+var series = require('map/series')
 ```
 
 ## API
@@ -37,26 +34,24 @@ map([1, 2, 3], function(value, key){
 
 ### series(obj:Object, fn:Function, [ctx]:Object)
 
-  the same as map but `fn` is allowed to do its operation asynchronously. Also the since the result of `series` can't simple be returned it is represented by a promise proxy. You are free to use continuation passing style (CPS) in your `fn` though; `series` guesses at the API your expecting and usually just does the right thing.
+  as above but understands the semantics of [Result](//github.com/jkroso/result) and is able to do the correct thing in all cases. That means you can pass Results as arguments and it will unbox them before processing them or return Results from `fn` and it will wait for them to complete complete before moving to the next value in `obj`. Series returns a Result in all cases.
 
 ```js
-series([1, 2, 3], function(value, key, done){
-  wolfram.isPrime(value, done)
+series([1, 2, 3], function(value, key){
+  return wolfram.isPrime(value)
 }).then(function(result){
   // => [false, true, true]
 })
 ```
 
+### parallel(obj:Object, fn:Function, [ctx]:Object)
+
+  as above but doesn't bother waiting for Results returned from `fn` to complete before processing the next item. So in the previous example you would end up with three concurrent request to wolfram.  
+
 ## Running the tests
 
 ```bash
-$ npm install
 $ make
 ```
-Then open your browser to the `./test` directory.
 
-_Note: these commands don't work on windows._ 
-
-## License 
-
-[MIT](License)
+Then open your browser to the [test](localhost:3000/test/index.html) directory.
