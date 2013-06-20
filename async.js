@@ -18,7 +18,9 @@ module.exports.plain = parallelMap
 
 function parallelMap(obj, fn, ctx){
 	if (obj == null) return Result.wrap(obj)
-	var newObj = new obj.constructor
+	var newVal = typeof obj.length == 'number'
+		? new Array(obj.length)
+		: new Object
 	var result = new Result
 	var done = false
 	var pending = 0
@@ -33,17 +35,17 @@ function parallelMap(obj, fn, ctx){
 		if (val instanceof ResType) {
 			pending++
 			val.read(function(value){
-				newObj[key] = value
+				newVal[key] = value
 				if (--pending === 0 && done) {
-					result.write(newObj)
+					result.write(newVal)
 				}
 			}, fail)
 		} else {
-			newObj[key] = value
+			newVal[key] = value
 		}
 	})
 	
-	if (pending === 0) result.write(newObj)
+	if (pending === 0) result.write(newVal)
 	else done = true
 
 	return result

@@ -18,18 +18,20 @@ module.exports.plain = mapSeries
 
 function mapSeries(obj, fn, ctx){
 	if (obj == null) return Result.wrap(obj)
-	var newObj = new obj.constructor
+	var newVal = typeof obj.length == 'number'
+		? new Array(obj.length)
+		: new Object
 	
 	return each(obj, function(value, key){
 		var val = fn.call(ctx, value, key)
 		if (val instanceof ResType) {
 			return val.read(function(value){
-				newObj[key] = value
+				newVal[key] = value
 			}, ignore)
 		} else {
-			newObj[val] = val
+			newVal[val] = val
 		}
-	}).yeild(newObj)
+	}).yeild(newVal)
 }
 
 function ignore(){
