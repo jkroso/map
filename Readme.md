@@ -13,14 +13,15 @@ then in your app:
 
 ```js
 var map = require('map')
-var async = require('map/async')
 var series = require('map/series')
+var async = require('map/async')
 ```
 
 ## API
 
 - [map()](#map)
 - [series()](#series)
+- [async()](#async)
 
 ### map(obj:Object, fn:Function, [ctx]:Object)
 
@@ -44,7 +45,7 @@ series([1, 2, 3], function(value, key){
 })
 ```
 
-### parallel(obj:Object, fn:Function, [ctx]:Object)
+### async(obj:Object, fn:Function, [ctx]:Object)
 
   as above but doesn't bother waiting for Results returned from `fn` to complete before processing the next item. So in the previous example you would end up with three concurrent request to wolfram.  
 
