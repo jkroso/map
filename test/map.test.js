@@ -38,7 +38,7 @@ describe('map', function(){
 })
 
 describe('series', function(){
-	it('should work on arrays', function(done){
+	it('should work sequentially on arrays', function(done){
 		var calls = []
 		series([1,2,3], function(v, k){
 			k.should.be.a('number')
@@ -55,7 +55,7 @@ describe('series', function(){
 		}).node(done)
 	})
 
-	it('should work on objects', function(done){
+	it('should work sequentially should on objects', function(done){
 		var calls = []
 		var delayed = []
 		series({a:1,b:2,c:3}, function(v, k){
@@ -70,35 +70,19 @@ describe('series', function(){
 		}).node(done)
 	})
 
-	it('should call `fn` with `ctx` as `this`', function(done){
-		series([1,2,3], function(v, k){
-			this.should.equal(Math)
-			return delay()
-		}, Math).node(done)
-	})
-
-	it('should handle empty arrays', function(done){
-		series([], function(v, k){
-			throw new Error('fail')
-		}).then(function(res){
-			res.should.eql([])
-		}).node(done)
-	})
-
-	it('should handle empty objects', function(done){
-		series({}, function(v, k){
-			throw new Error('fail')
-		}).then(function(res){
-			res.should.eql({})
-		}).node(done)
-	})
-
+	commonAsyncProperties(series)
 	errorHandling(series)
 })
 
 describe('async', function(){
+	commonAsyncProperties(async)
+	errorHandling(async)
+})
+
+
+function commonAsyncProperties(map){
 	it('should work on arrays', function(done){
-		async([1,2,3], function(v, i){
+		map([1,2,3], function(v, i){
 			return delay(v + 1)
 		}).then(function(arr){
 			arr.should.eql([2,3,4])
@@ -106,15 +90,44 @@ describe('async', function(){
 	})
 
 	it('should work on objects', function(done){
-		async({a:1,b:2,c:3}, function(v, i){
+		map({a:1,b:2,c:3}, function(v, i){
 			return delay(v + 1)
 		}).then(function(obj){
 			obj.should.eql({a:2,b:3,c:4})
 		}).node(done)
 	})
 
-	errorHandling(async)
-})
+	it('should call `fn` with `ctx` as `this`', function(done){
+		map([1,2,3], function(v, k){
+			this.should.equal(Math)
+			return delay()
+		}, Math).node(done)
+	})
+
+	it('should handle empty arrays', function(done){
+		map([], function(v, k){
+			throw new Error('fail')
+		}).then(function(res){
+			res.should.eql([])
+		}).node(done)
+	})
+
+	it('should handle empty objects', function(done){
+		map({}, function(v, k){
+			throw new Error('fail')
+		}).then(function(res){
+			res.should.eql({})
+		}).node(done)
+	})
+
+	it('should handle non Result returns', function(done){
+		map([1,2,3], function(v){
+			return v + 1
+		}).then(function(arr){
+			arr.should.eql([2,3,4])
+		}).node(done)
+	})
+}
 
 function errorHandling(map){
 	describe('error handling', function(){

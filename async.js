@@ -1,23 +1,13 @@
 
 var decorate = require('when/decorate')
-  , ResType = require('result-type')
+  , ResultType = require('result-type')
   , Result = require('result')
   , each = require('foreach')
 
 module.exports = decorate(parallelMap)
 module.exports.plain = parallelMap
 
-/**
- * transform each item in an object by applying `fn`
- *
- * @param {Object|Array} obj
- * @param {Function} fn
- * @param {Any} [ctx]
- * @return {Result} new `obj`
- */
-
 function parallelMap(obj, fn, ctx){
-	if (obj == null) return Result.wrap(obj)
 	var newVal = typeof obj.length == 'number'
 		? new Array(obj.length)
 		: new Object
@@ -30,11 +20,11 @@ function parallelMap(obj, fn, ctx){
 	}
 
 	each(obj, function(value, key){
-		try { var val = fn.call(ctx, value, key) }
+		try { value = fn.call(ctx, value, key) }
 		catch (e) { return result.error(e) }
-		if (val instanceof ResType) {
+		if (value instanceof ResultType) {
 			pending++
-			val.read(function(value){
+			value.read(function(value){
 				newVal[key] = value
 				if (--pending === 0 && done) {
 					result.write(newVal)
