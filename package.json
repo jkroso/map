@@ -1,11 +1,11 @@
 {
   "name": "map",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "apply a transformation to each item within an object",
   "dependencies": {
-    "result": "0.3.0",
+    "result": "0.3.1",
     "result-type": "1.0.0",
-    "when": "http://github.com/jkroso/when/tarball/3.2.1",
+    "when": "http://github.com/jkroso/when/tarball/3.2.4",
     "foreach": "http://github.com/jkroso/forEach/tarball/0.8.4"
   },
   "repository": {
