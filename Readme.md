@@ -5,7 +5,7 @@
 
 ## Installation
 
-_With [component](//github.com/component/component), [packin](//github.com/jkroso/packin) or [npm](//github.com/isaacs/npm)_  
+_With [component](//github.com/component/component), [packin](//github.com/jkroso/packin) or [npm](//github.com/isaacs/npm)_
 
     $ {package mananger} install jkroso/map
 
@@ -19,11 +19,7 @@ var async = require('map/async')
 
 ## API
 
-- [map()](#map)
-- [series()](#series)
-- [async()](#async)
-
-### map(obj:Object, fn:Function, [ctx]:Object)
+### map(obj, fn, [ctx])
 
   transform each value contained in `obj` return a new `obj` with the same keys but their corresponding values replaced with the return value of `fn`
 
@@ -33,7 +29,7 @@ map([1, 2, 3], function(value, key){
 }) // => [2, 3, 4]
 ```
 
-### series(obj:Object, fn:Function, [ctx]:Object)
+### series(obj, fn, [ctx])
 
   as above but understands the semantics of [Result](//github.com/jkroso/result) and is able to do the correct thing in all cases. That means you can pass Results as arguments and it will unbox them before processing them or return Results from `fn` and it will wait for them to complete complete before moving to the next value in `obj`. Series returns a Result in all cases.
 
@@ -45,9 +41,9 @@ series([1, 2, 3], function(value, key){
 })
 ```
 
-### async(obj:Object, fn:Function, [ctx]:Object)
+### async(obj, fn, [ctx])
 
-  as above but doesn't bother waiting for Results returned from `fn` to complete before processing the next item. So in the previous example you would end up with three concurrent request to wolfram.  
+  as above but doesn't bother waiting for Results returned from `fn` to complete before processing the next item. So in the previous example you would end up with three concurrent request to wolfram.
 
 ## Running the tests
 
