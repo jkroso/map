@@ -1,13 +1,10 @@
 
-var decorate = require('when/decorate')
-  , ResultType = require('result-type')
-  , Result = require('result')
-  , each = require('foreach')
+var ResultType = require('result-type')
+var lift = require('lift-result')
+var Result = require('result')
+var each = require('foreach')
 
-module.exports = decorate(parallelMap)
-module.exports.plain = parallelMap
-
-function parallelMap(obj, fn, ctx){
+module.exports = lift(function(obj, fn, ctx){
 	var newVal = typeof obj.length == 'number'
 		? new Array(obj.length)
 		: new Object
@@ -34,9 +31,9 @@ function parallelMap(obj, fn, ctx){
 			newVal[key] = value
 		}
 	})
-	
+
 	if (pending === 0) result.write(newVal)
 	else done = true
 
 	return result
-}
+})

@@ -2,7 +2,7 @@
   "name": "map",
   "repo": "jkroso/map",
   "description": "apply a transformation to each item within an object",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "keywords": [
     "map",
     "array",
@@ -13,15 +13,15 @@
     "object"
   ],
   "dependencies": {
-    "jkroso/result": "0.3.1",
-    "jkroso/when": "3.2.4",
+    "jkroso/result": "0.3.4",
     "jkroso/result-type": "1.0.0",
-    "jkroso/forEach": "0.8.5"
+    "jkroso/forEach": "0.8.6",
+    "jkroso/lift-result": "0.1.0"
   },
   "development": {
-    "jkroso/serve": "1.4.2",
-    "visionmedia/mocha": "1.11.0",
-    "chaijs/chai": "1.7.0"
+    "jkroso/serve": "1.5.0",
+    "visionmedia/mocha": "1.12.1",
+    "chaijs/chai": "1.7.2"
   },
   "scripts": [
     "index.js",
