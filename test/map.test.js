@@ -1,9 +1,9 @@
 
+var series = require('../series')
+var async = require('../async')
+var Result = require('result')
 var chai = require('./chai')
-  , series = require('../series')
-  , async = require('../async')
-  , Result = require('result')
-  , map = require('..')
+var map = require('..')
 
 function delay(value){
 	var result = new Result

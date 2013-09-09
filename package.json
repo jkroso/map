@@ -1,12 +1,12 @@
 {
   "name": "map",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "apply a transformation to each item within an object",
   "dependencies": {
-    "result": "0.3.4",
+    "foreach": "http://github.com/jkroso/forEach/tarball/0.8.7",
     "result-type": "1.0.0",
     "lift-result": "0.1.0",
-    "foreach": "http://github.com/jkroso/forEach/tarball/0.8.6"
+    "result": "0.4.2"
   },
   "repository": {
     "type": "git",
