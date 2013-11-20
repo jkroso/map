@@ -1,20 +1,15 @@
 {
   "name": "map",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "apply a transformation to each item within an object",
   "dependencies": {
-    "foreach": "http://github.com/jkroso/forEach/tarball/0.8.7",
+    "foreach": "jkroso/forEach#0.8.8",
     "result-type": "1.0.0",
-    "lift-result": "0.1.0",
-    "result": "0.4.2"
+    "lift-result": "~0.1.2",
+    "result": "~0.4.3"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jkroso/map.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jkroso/map/issues"
-  },
+  "repository": "git://github.com/jkroso/map.git",
+  "bugs": "https://github.com/jkroso/map/issues",
   "keywords": [
     "map",
     "array",
