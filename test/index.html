@@ -1,23 +1,21 @@
 <!doctype html>
 <html>
 <head>
-	<title>map tests</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+  <title>map tests</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
 </head>
 <body>
-	<div id="mocha"></div>
-	<script>
-		var mocha = require('mocha')
-		mocha.setup('bdd')
-		mocha.timeout(200)
+  <div id="mocha"></div>
+  <script>
+    var mocha = require('mocha')
+    mocha.setup('bdd')
+    mocha.timeout(200)
 
-		require('./map.test')
+    require('./map.test')
 
-		mocha.run(function(){
-			console.log('Done!')
-		})
-	</script>
+    mocha.run()
+  </script>
 </body>
 </html>
