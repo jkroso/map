@@ -3,29 +3,12 @@
   "repo": "jkroso/map",
   "description": "apply a transformation to each item within an object",
   "dependencies": {
-    "jkroso/lift-result": "0.1.2",
+    "jkroso/lift-result": "0.1.3",
     "jkroso/result-type": "1.0.0",
-    "jkroso/forEach": "0.8.8",
-    "jkroso/result": "0.4.3"
+    "jkroso/forEach": "0.8.9",
+    "jkroso/result": "0.4.6"
   },
-  "development": {
-    "visionmedia/mocha": "*",
-    "jkroso/serve": "*",
-    "chaijs/chai": "*"
-  },
-  "scripts": [
-    "index.js",
-    "async.js",
-    "series.js"
-  ],
-  "keywords": [
-    "map",
-    "array",
-    "key",
-    "values",
-    "async",
-    "series",
-    "object"
-  ],
+  "scripts": ["index.js", "async.js", "series.js"],
+  "keywords": ["map", "array", "object"],
   "license": "MIT"
 }

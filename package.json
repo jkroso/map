@@ -1,24 +1,21 @@
 {
   "name": "map",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "apply a transformation to each item within an object",
   "dependencies": {
-    "foreach": "jkroso/forEach#0.8.8",
+    "foreach": "jkroso/forEach#0.8.9",
+    "lift-result": "~0.1.3",
     "result-type": "1.0.0",
-    "lift-result": "~0.1.2",
-    "result": "~0.4.3"
+    "result": "~0.4.6"
+  },
+  "devDependencies": {
+    "serve": "jkroso/serve",
+    "mocha": "*",
+    "chai": "*"
   },
   "repository": "git://github.com/jkroso/map.git",
   "bugs": "https://github.com/jkroso/map/issues",
-  "keywords": [
-    "map",
-    "array",
-    "key",
-    "values",
-    "async",
-    "series",
-    "object"
-  ],
+  "keywords": ["object", "array", "map"],
   "author": "Jake Rosoman",
   "license": "MIT"
 }
