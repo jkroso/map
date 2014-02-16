@@ -10,8 +10,6 @@ test: node_modules
 		--check-leaks
 
 node_modules: package.json
-	@packin install \
-		--meta package.json \
-		--folder node_modules \
+	@packin install --meta $< --folder $@
 
 .PHONY: serve test

@@ -17,7 +17,7 @@ module.exports = lift(function(obj, fn, ctx){
     } else {
       newVal[key] = value
     }
-  }, ctx).yeild(newVal)
+  }, ctx).yield(newVal)
 })
 
 function ignore(){
